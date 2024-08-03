@@ -16,25 +16,26 @@ module figure(len_x, len_y, len_z) {
   }
 }
 
+hole_inner_width_mm = 38;
+hole_inner_height_mm = 14;
+
+function hole_outer_width(border_thickness) = hole_inner_width_mm + border_thickness * 2 * sqrt(2);
+
 module plug_hole(border_thickness = 2, depth = 2, thin = true) {
-  hole_x_mm = 38;
-  hole_y_mm = 14;
-  hole_angle_deg = 45;
 
   border_x_mm = border_thickness * sqrt(2);
   border_y_mm = border_thickness;
 
   difference() {
     if (thin) {
-      figure(hole_x_mm + 2 * border_x_mm, hole_y_mm + 2 * border_y_mm, depth);
+      figure(hole_inner_width_mm + 2 * border_x_mm, hole_inner_height_mm + 2 * border_y_mm, depth);
     } else {
-      cube([hole_x_mm + 2 * border_x_mm, hole_y_mm + 2 * border_y_mm, depth]);
+      cube([hole_inner_width_mm + 2 * border_x_mm, hole_inner_height_mm + 2 * border_y_mm, depth]);
     }
 
 
     translate([border_x_mm, border_y_mm, 0])
-    figure(hole_x_mm, hole_y_mm, depth);
+    figure(hole_inner_width_mm, hole_inner_height_mm, depth);
   }
 }
 
-plug_hole(border_thickness = 2, depth = 2, thin = true);

@@ -19,7 +19,7 @@ module figure(len_x, len_y, len_z) {
 hole_inner_width_mm = 38;
 hole_inner_height_mm = 14;
 
-function hole_outer_width(border_thickness) = hole_inner_width_mm + border_thickness * 2 * sqrt(2);
+function fn_hole_outer_width(border_thickness) = hole_inner_width_mm + border_thickness * 2 * sqrt(2);
 
 module plug_hole(border_thickness = 2, depth = 2, thin = true) {
 

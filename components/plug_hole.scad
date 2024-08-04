@@ -1,41 +1,39 @@
-module figure(len_x, len_y, len_z) {
+module figure(dims) {
   union() {
-    square_x = len_y / sqrt(2);
-    square_z = len_z;
+    square_diagonal = dims.y;
+    square_side = square_diagonal / sqrt(2);
+    square_z = dims.z;
 
-    translate([len_y / 2, 0, 0])
-    rotate(a = 45, v = [0, 0, 1])
-    cube([square_x, square_x, len_z]);
+    translate([-(dims.x - square_diagonal) / 2, 0, 0])
+    rotate(a = 45, v = [0, 0, 1]) 
+    cube([square_side, square_side, dims.z], center = true);
 
-    translate([len_x - len_y / 2, 0, 0])
-    rotate(a = 45, v = [0, 0, 1])
-    cube([square_x, square_x, len_z]);
-
-    translate([len_y / 2, 0, 0])
-    cube([len_x - len_y, len_y, len_z]);
+    translate([(dims.x - square_diagonal) / 2, 0,0])
+    rotate(a = 45, v = [0, 0, 1]) 
+    cube([square_side, square_side, dims.z], center = true);
+    
+    // Base
+    cube([dims.x - dims.y, dims.y, dims.z], center = true);
   }
 }
 
-hole_inner_width_mm = 38;
-hole_inner_height_mm = 14;
+plug_hole_inner_width = 38;
+plug_hole_inner_height = 14;
 
-function fn_hole_outer_width(border_thickness) = hole_inner_width_mm + border_thickness * 2 * sqrt(2);
+function fn_hole_outer_width(border_thickness) = plug_hole_inner_width + border_thickness * 2 * sqrt(2);
 
-module plug_hole(border_thickness = 2, depth = 2, thin = true) {
-
-  border_x_mm = border_thickness * sqrt(2);
-  border_y_mm = border_thickness;
+module plug_hole(border_thickness = 2, h = 2, thin = true) {
+  border_x = border_thickness * sqrt(2);
+  border_y = border_thickness;  
 
   difference() {
     if (thin) {
-      figure(hole_inner_width_mm + 2 * border_x_mm, hole_inner_height_mm + 2 * border_y_mm, depth);
+      figure([plug_hole_inner_width + 2 * border_x, plug_hole_inner_height + 2 * border_y, h]);
     } else {
-      cube([hole_inner_width_mm + 2 * border_x_mm, hole_inner_height_mm + 2 * border_y_mm, depth]);
+      cube([plug_hole_inner_width + 2 * border_x, plug_hole_inner_height + 2 * border_y, h], center = true);
     }
 
-
-    translate([border_x_mm, border_y_mm, 0])
-    figure(hole_inner_width_mm, hole_inner_height_mm, depth);
+    figure([plug_hole_inner_width, plug_hole_inner_height, h]);
   }
 }
 
